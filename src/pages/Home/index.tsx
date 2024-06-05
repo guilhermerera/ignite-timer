@@ -13,7 +13,7 @@ import {
 	TaskInput
 } from "./styles";
 
-const newCycleFormSchema = zod.object({
+const newCycleFormValidationSchema = zod.object({
 	task: zod.string().min(1, "Task name is required"),
 	minutesAmount: zod
 		.number()
@@ -21,12 +21,18 @@ const newCycleFormSchema = zod.object({
 		.max(60, "Cycle needs to be less than 60 minutes")
 });
 
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>;
+
 export function Home() {
-	const { register, handleSubmit, watch } = useForm({
-		resolver: zodResolver(newCycleFormSchema)
+	const { register, handleSubmit, watch } = useForm<NewCycleFormData>({
+		resolver: zodResolver(newCycleFormValidationSchema),
+		defaultValues: {
+			task: "",
+			minutesAmount: 5
+		}
 	});
 
-	function handleCreateNewCycle(data: any) {}
+	function handleCreateNewCycle(data: NewCycleFormData) {}
 
 	const task = watch("task");
 	const shouldSubmitBeDisabled = !task;
