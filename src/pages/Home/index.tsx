@@ -76,13 +76,18 @@ export function Home() {
 	const shouldSubmitBeDisabled = !task;
 
 	useEffect(() => {
+		let interval: number;
 		if (activeCycle) {
-			setInterval(() => {
+			interval = setInterval(() => {
 				setAmountSecondsPassed(
 					differenceInSeconds(new Date(), activeCycle.startDate)
 				);
 			}, 1000);
 		}
+
+		return () => {
+			clearInterval(interval);
+		};
 	}, [activeCycle]);
 
 	return (
