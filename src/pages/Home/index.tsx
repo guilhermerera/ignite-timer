@@ -58,9 +58,11 @@ export function Home() {
 
 		setCycles((state) => [...state, newCycle]);
 		setActiveCycleId(id);
+		setAmountSecondsPassed(0);
 
 		reset();
 	}
+
 	const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
 	const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
@@ -89,6 +91,12 @@ export function Home() {
 			clearInterval(interval);
 		};
 	}, [activeCycle]);
+
+	useEffect(() => {
+		if (activeCycle) {
+			document.title = `${minutes}:${seconds} - ${activeCycle.task}`;
+		}
+	}, [minutes, seconds, task, activeCycle]);
 
 	return (
 		<HomeContainer>
